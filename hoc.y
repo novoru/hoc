@@ -1,9 +1,14 @@
 %{
+  #include <stdio.h>
+  #include <math.h>
   #define YYSTYPE double
+  int yylex();
+  int yyerror(char *s);
+  int warning(char *s, char *t);
 %}
 %token NUMBER
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '%'
 %left UNARYMINUS UNARYPLUS
 %%
 list:  /* nothing */
@@ -15,6 +20,7 @@ expr:  NUMBER   { $$ = $1;}
 | expr '-' expr { $$ = $1 - $3;}
 | expr '*' expr { $$ = $1 * $3;}
 | expr '/' expr { $$ = $1 / $3;}
+| expr '%' expr { $$ = fmod($1, $3);}
 | '-' expr %prec UNARYMINUS { $$ = -$2;}
 | '+' expr %prec UNARYPLUS { $$ = +$2;}
 | '(' expr ')' { $$ = $2;}
@@ -24,6 +30,8 @@ expr:  NUMBER   { $$ = $1;}
 
 #include <stdio.h>
 #include <ctype.h>
+#include <math.h>
+
 char *progname;   /* for error message */
 int lineno = 1;
 
@@ -32,7 +40,7 @@ main(int argc, char **argv) {  /* hoc1 */
   yyparse();
 }
 
-yylex() {
+int yylex() {
   int c;
 
   while((c = getchar()) == ' ' || c == '\t')
@@ -49,11 +57,11 @@ yylex() {
   return c;
 }
 
-yyerror(char *s) {
+int yyerror(char *s) {
   warning(s, (char*)0);
 }
 
-warning(char *s, char *t) {
+int warning(char *s, char *t) {
   fprintf(stderr, "%s: %s", progname, s);
   if(t)
     fprintf(stderr, " %s", t);

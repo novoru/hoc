@@ -3,7 +3,7 @@ CC=gcc
 YSRCS=$(wildcard *.y)
 CSRCS=y.tab.c
 OBJS=$(CSRCS:.c=.o)
-CFLAGS=-Wall -std=c11
+CFLAGS=-Wall -std=c11 -lm
 
 hoc1:
 	$(CC) -o $@ $(CSRCS) $(CFLAGS)
