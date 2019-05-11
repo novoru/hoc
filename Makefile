@@ -5,12 +5,12 @@ CSRCS=y.tab.c
 OBJS=$(CSRCS:.c=.o)
 CFLAGS=-Wall -std=c11 -lm
 
-hoc1:
+hoc2:
 	$(CC) -o $@ $(CSRCS) $(CFLAGS)
 
-hoc1: $(OBJS)
+hoc2: $(OBJS)
 $(CSRCS): $(YSRCS)
 	$(YY) $(YSRCS)
 
 clean:
-	rm -rf hoc1 *.o *~ tmp* a.out \#* y.tab.c
+	rm -rf hoc2 *.o *~ tmp* a.out \#* y.tab.c
